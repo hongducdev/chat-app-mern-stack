@@ -38,7 +38,7 @@ const Login = () => {
         </form>
         <p className="mt-5 text-center">
           Don&apos;t have an account?{" "}
-          <a href="#" className="text-ctp-pink">
+          <a href="/signup" className="text-ctp-pink">
             Sign up
           </a>
         </p>
