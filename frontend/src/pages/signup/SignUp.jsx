@@ -1,4 +1,29 @@
+import { useState } from "react";
+import useSignUp from "../../hooks/useSignUp";
+
 const SignUp = () => {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+    gender: "male",
+  });
+  const { signup, isLoading } = useSignUp();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await signup(formData);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-w-[25vw] mx-auto">
       <div className="w-full p-6 rounded-lg shadow-md bg-gradient-to-br from-ctp-mantle to-ctp-crust outline outline-ctp-pink">
@@ -9,16 +34,19 @@ const SignUp = () => {
           </span>
         </h2>
 
-        <form className="mt-5">
+        <form className="mt-5" onSubmit={handleSubmit}>
           <div className="">
-            <label htmlFor="fullname" className="label">
+            <label htmlFor="fullName" className="label">
               Full name
             </label>
             <input
-              id="fullname"
+              id="fullName"
               type="text"
+              name="fullName"
               placeholder="Enter your full name"
               className="input input-bordered w-full"
+              value={formData.fullName}
+              onChange={handleChange}
             />
           </div>
           <div className="">
@@ -28,8 +56,11 @@ const SignUp = () => {
             <input
               id="username"
               type="text"
+              name="username"
               placeholder="Enter your username"
               className="input input-bordered w-full"
+              value={formData.username}
+              onChange={handleChange}
             />
           </div>
           <div className="">
@@ -39,8 +70,11 @@ const SignUp = () => {
             <input
               id="password"
               type="password"
+              name="password"
               placeholder="Enter your password"
               className="input input-bordered w-full"
+              value={formData.password}
+              onChange={handleChange}
             />
           </div>
           <div className="">
@@ -50,8 +84,11 @@ const SignUp = () => {
             <input
               id="confirmPassword"
               type="password"
+              name="confirmPassword"
               placeholder="Enter your password again"
               className="input input-bordered w-full"
+              value={formData.confirmPassword}
+              onChange={handleChange}
             />
           </div>
           <div className="mt-3 flex items-center gap-5">
@@ -62,7 +99,8 @@ const SignUp = () => {
                 name="gender"
                 className="radio"
                 value="male"
-                checked
+                checked={formData.gender === "male"}
+                onChange={handleChange}
               />
               <label htmlFor="male">Male</label>
             </div>
@@ -73,6 +111,8 @@ const SignUp = () => {
                 name="gender"
                 className="radio"
                 value="female"
+                checked={formData.gender === "female"}
+                onChange={handleChange}
               />
               <label htmlFor="female">Female</label>
             </div>
