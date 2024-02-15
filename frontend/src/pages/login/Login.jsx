@@ -1,4 +1,17 @@
+import { useState } from "react";
+import useLogin from "../../hooks/useLogin";
+
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { isLoading, login } = useLogin();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await login(username, password);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-w-[25vw] mx-auto">
       <div className="w-full p-6 rounded-lg shadow-md bg-gradient-to-br from-ctp-mantle to-ctp-crust outline outline-ctp-pink">
@@ -9,7 +22,7 @@ const Login = () => {
           </span>
         </h2>
 
-        <form className="mt-5">
+        <form className="mt-5" onSubmit={handleSubmit}>
           <div className="">
             <label htmlFor="username" className="label">
               Username
@@ -19,6 +32,8 @@ const Login = () => {
               type="text"
               placeholder="Enter your username"
               className="input input-bordered w-full"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div className="">
@@ -30,10 +45,19 @@ const Login = () => {
               type="password"
               placeholder="Enter your password"
               className="input input-bordered w-full"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button className="btn bg-gradient-to-r from-ctp-pink to-ctp-mauve w-full mt-5 text-ctp-base text-xl">
-            Login
+          <button
+            className="btn bg-gradient-to-r from-ctp-pink to-ctp-mauve w-full mt-5 text-ctp-base text-xl"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="loading loading-spinner loading-xs"></div>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
         <p className="mt-5 text-center">

@@ -117,8 +117,15 @@ const SignUp = () => {
               <label htmlFor="female">Female</label>
             </div>
           </div>
-          <button className="btn bg-gradient-to-r from-ctp-pink to-ctp-mauve w-full mt-5 text-ctp-base text-xl">
-            SignUp
+          <button
+            className="btn bg-gradient-to-r from-ctp-pink to-ctp-mauve w-full mt-5 text-ctp-base text-xl"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="loading loading-spinner loading-xs"></div>
+            ) : (
+              "Sign Up"
+            )}
           </button>
         </form>
         <p className="mt-5 text-center">

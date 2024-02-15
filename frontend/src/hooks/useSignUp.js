@@ -1,10 +1,9 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { useAuthContext } from "../context/AuthContext";
 
-const useSignUp = () => {
-  const [isLoading, setIsLoading] = useState(false);
+const useSignup = () => {
+  const [loading, setLoading] = useState(false);
   const { setAuthUser } = useAuthContext();
 
   const signup = async ({
@@ -21,51 +20,48 @@ const useSignUp = () => {
       confirmPassword,
       gender,
     });
-
     if (!success) return;
 
-    setIsLoading(true);
+    setLoading(true);
     try {
-      const response = await axios.post("/api/auth/signup", {
-        fullName,
-        username,
-        password,
-        confirmPassword,
-        gender,
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName,
+          username,
+          password,
+          confirmPassword,
+          gender,
+        }),
       });
 
-      if (response.data.error) {
-        toast.error(response.data.error);
-        throw new Error(response.data.error);
+      const data = await res.json();
+      if (data.error) {
+        throw new Error(data.error);
       }
-      toast.success("Account created successfully");
-      localStorage.setItem("chat-user", JSON.stringify(response.data));
-      setAuthUser(response.data);
+      localStorage.setItem("chat-user", JSON.stringify(data));
+      setAuthUser(data);
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
-  return { isLoading, signup };
+
+  return { loading, signup };
 };
+export default useSignup;
 
-export default useSignUp;
-
-const handleInputErrors = ({
+function handleInputErrors({
   fullName,
   username,
   password,
   confirmPassword,
   gender,
-}) => {
+}) {
   if (!fullName || !username || !password || !confirmPassword || !gender) {
-    toast.error("All fields are required");
-    return false;
-  }
-
-  if (password.length < 6) {
-    toast.error("Password must be at least 6 characters long");
+    toast.error("Please fill in all fields");
     return false;
   }
 
@@ -74,5 +70,10 @@ const handleInputErrors = ({
     return false;
   }
 
+  if (password.length < 6) {
+    toast.error("Password must be at least 6 characters");
+    return false;
+  }
+
   return true;
-};
+}
