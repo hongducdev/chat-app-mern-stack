@@ -1,14 +1,18 @@
 import Conversation from "./Conversation";
+import useGetConversation from "../../hooks/useGetConversation";
 
 const Conversations = () => {
+  const { conversation, isLoading } = useGetConversation();
+
   return (
     <div className="py-2 flex flex-col overflow-y-auto">
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
+      {isLoading ? (
+        <div className="loading loading-spinner mx-auto"></div>
+      ) : (
+        conversation.map((conversation) => (
+          <Conversation key={conversation._id} conversation={conversation} />
+        ))
+      )}
     </div>
   );
 };
