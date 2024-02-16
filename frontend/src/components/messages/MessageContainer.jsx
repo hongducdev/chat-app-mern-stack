@@ -3,7 +3,7 @@ import MessageInput from "./MessageInput";
 import Messages from "./Messages";
 
 const MessageContainer = () => {
-  const { selectedConversation, setSelectedConversation } = useConversation();
+  const { selectedConversation } = useConversation();
   return (
     <div className="md:min-w-[35vw] flex flex-col">
       {!selectedConversation ? (
