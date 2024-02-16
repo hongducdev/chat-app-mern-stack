@@ -1,18 +1,33 @@
-const Conversation = () => {
+import PropTypes from "prop-types";
+import useConversation from "../../store/useConversation";
+
+const Conversation = ({ conversation }) => {
+  const { selectedConversation, setSelectedConversation } = useConversation();
+
+  const isSelected = selectedConversation?._id === conversation._id;
+
   return (
-    <section className="group">
-      <div className="flex items-center gap-4 group-hover:bg-ctp-pink rounded p-2 py-1 cursor-pointer">
+    <section
+      className="group"
+      onClick={() => setSelectedConversation(conversation)}
+    >
+      <div
+        className={`flex items-center gap-4 group-hover:bg-ctp-pink rounded p-2 py-1 cursor-pointer ${
+          isSelected && "bg-ctp-pink"
+        }`}
+      >
         <div className="avatar online">
           <div className="w-12 rounded-full">
-            <img
-              src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-              alt="avatar_user"
-            />
+            <img src={conversation.profilePic} alt={conversation.username} />
           </div>
         </div>
         <div className="flex flex-col flex-1">
-          <span className="font-semibold text-xl group-hover:text-ctp-mantle">
-            Nguyen Hong Duc
+          <span
+            className={`font-semibold text-xl group-hover:text-ctp-mantle ${
+              isSelected && "text-ctp-mantle"
+            }`}
+          >
+            {conversation.fullName}
           </span>
         </div>
       </div>
@@ -22,3 +37,7 @@ const Conversation = () => {
 };
 
 export default Conversation;
+
+Conversation.propTypes = {
+  conversation: PropTypes.object.isRequired,
+};
